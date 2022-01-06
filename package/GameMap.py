@@ -1,4 +1,4 @@
-import GameCell
+from package import GameCell
 
 
 class GameMap:
@@ -6,7 +6,7 @@ class GameMap:
     __height, __width = 0, 0
     map = []
 
-    def __init__(self, height, width):
-        self.__height = height
-        self.__width = width
-        self.map = [[GameCell.GameCell() for _i in range(width)] for _j in range(height)]
+    def __init__(self, first_generation):
+        self.__height = first_generation.size[1]
+        self.__width = first_generation.size[0]
+        self.map = [[GameCell.GameCell() for _i in range(self.__width)] for _j in range(self.__height)]
