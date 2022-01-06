@@ -4,6 +4,13 @@ from package import GameControl
 game_control = None
 
 
+def alert_window():
+    input(
+        "Первое поколение должно быть в формате jpg. Белый цвет - мертвые клетки, черный - живые. \nНичего страшного," +
+        " если изображение будет содержать небольшие шумы или тени, программа пострается исправить их.\n" +
+        "Нажмите Enter, чтобы продолжить")
+
+
 def parse_args():
     global game_control
 
@@ -18,6 +25,7 @@ def parse_args():
 
 
 def main():
+    alert_window()
     parse_args()
 
 

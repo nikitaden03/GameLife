@@ -7,4 +7,3 @@ class GameCell:
 
     def set_is_alive(self, is_alive):
         self.__is_alive = is_alive
-
