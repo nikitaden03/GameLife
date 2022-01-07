@@ -20,8 +20,8 @@ class GameControl:
         if not (os.path.exists(self._input_file) and os.path.isfile(self._input_file)):
             print(f"К сожалению, {self._input_file} не существует или не является файлом")
             exit(0)
-        if list(self._input_file.split("."))[-1] != "jpg":
-            print(f"Файл с первым поколением игры должен быть в формате jpg")
+        if list(self._input_file.split("."))[-1] != "png":
+            print(f"Файл с первым поколением игры должен быть в формате png")
             exit(0)
 
         self.game_map = GameMap(Image.open(self._input_file).convert("RGB"))
