@@ -2,9 +2,8 @@ from package import GameCell
 
 
 class GameMap:
-
     __height, __width = 0, 0
-    map = []
+    __map = []
 
     def __init__(self, first_generation):
         self.__height = first_generation.size[1]
@@ -12,18 +11,27 @@ class GameMap:
         colors = {}
 
         for j in range(self.__height):
-            self.map.append([])
+            self.__map.append([])
             for i in range(self.__width):
-                self.map[j].append(GameCell.GameCell())
+                self.__map[j].append(GameCell.GameCell())
                 color = first_generation.getpixel((i, j))
-                # if color != (255, 255, 255) and color != (0, 0, 0):
-                #     if abs(255 - color[0]) < abs(0 - color[0]) or color == (255, 255, 255):
-                #         first_generation.putpixel((i, j), (255, 255, 255))
-                #     else:
-                #         first_generation.putpixel((i, j), (0, 0, 0))
-                # color = first_generation.getpixel((i, j))
                 if color in colors:
                     colors[color] += 1
                 else:
                     colors[color] = 1
-        print(colors)
+
+        if len(colors) > 2:
+            print(f"Изображение должно содержать не более двух цветов. В переданном - {len(colors)}!")
+            exit(0)
+
+        if not ((len(colors) == 2 and (255, 255, 255) in colors and (0, 0, 0) in colors) or (
+                len(colors) == 1 and ((255, 255, 255) in colors or (0, 0, 0) in colors))):
+            print("Изображение может сожержать только черные (0, 0, 0) и белые (255, 255, 255) цвета!")
+            exit(0)
+
+        for j in range(self.__height):
+            for i in range(self.__width):
+                if first_generation.getpixel((i, j)) == (255, 255, 255):
+                    self.__map[j][i].set_is_alive = False
+                else:
+                    self.__map[j][i].set_is_alive = True
