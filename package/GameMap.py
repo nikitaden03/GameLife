@@ -40,24 +40,24 @@ class GameMap:
         alive_neighbours = 0
 
         if cell_x + 1 < self.__width:
-            if cell_y - 1 >= 0 and (GameCell.GameCell(self.__map[cell_y - 1][cell_x + 1])).get_is_alive():
+            if cell_y - 1 >= 0 and self.__map[cell_y - 1][cell_x + 1].get_is_alive():
                 alive_neighbours += 1
-            if (GameCell.GameCell(self.__map[cell_y][cell_x + 1])).get_is_alive():
+            if self.__map[cell_y][cell_x + 1].get_is_alive():
                 alive_neighbours += 1
-            if cell_y + 1 < self.__height and (GameCell.GameCell(self.__map[cell_y + 1][cell_x + 1])).get_is_alive():
+            if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x + 1].get_is_alive():
                 alive_neighbours += 1
 
         if cell_x - 1 >= 0:
-            if cell_y - 1 >= 0 and (GameCell.GameCell(self.__map[cell_y - 1][cell_x - 1])).get_is_alive():
+            if cell_y - 1 >= 0 and self.__map[cell_y - 1][cell_x - 1].get_is_alive():
                 alive_neighbours += 1
-            if (GameCell.GameCell(self.__map[cell_y][cell_x - 1])).get_is_alive():
+            if self.__map[cell_y][cell_x - 1].get_is_alive():
                 alive_neighbours += 1
-            if cell_y + 1 < self.__height and (GameCell.GameCell(self.__map[cell_y + 1][cell_x - 1])).get_is_alive():
+            if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x - 1].get_is_alive():
                 alive_neighbours += 1
 
-        if cell_y - 1 >= 0 and (GameCell.GameCell(self.__map[cell_y - 1][cell_x])).get_is_alive():
+        if cell_y - 1 >= 0 and self.__map[cell_y - 1][cell_x].get_is_alive():
             alive_neighbours += 1
-        if cell_y + 1 < self.__height and (GameCell.GameCell(self.__map[cell_y + 1][cell_x])).get_is_alive():
+        if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x].get_is_alive():
             alive_neighbours += 1
 
         print(type(self.__map[cell_y][cell_x]))
@@ -65,7 +65,7 @@ class GameMap:
         return alive_neighbours
 
     def next_generation(self):
-        new_map = []
+        new_map = self.__map.copy()
         for j in range(self.__height):
             new_map.append([])
             for i in range(self.__width):
