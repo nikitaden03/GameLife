@@ -39,28 +39,45 @@ class GameMap:
     def count_neighbours(self, cell_x, cell_y):
         alive_neighbours = 0
 
-        if cell_x + 1 < self.__width:
-            if cell_y - 1 >= 0 and (GameCell.GameCell(self.__map[cell_y - 1][cell_x + 1])).get_is_alive():
-                alive_neighbours += 1
-            if (GameCell.GameCell(self.__map[cell_y][cell_x + 1])).get_is_alive():
-                alive_neighbours += 1
-            if cell_y + 1 < self.__height and (GameCell.GameCell(self.__map[cell_y + 1][cell_x + 1])).get_is_alive():
-                alive_neighbours += 1
+        # if cell_x + 1 < self.__width:
+        #     if cell_y - 1 >= 0 and self.__map[cell_y - 1][cell_x + 1].get_is_alive():
+        #         alive_neighbours += 1
+        #     if self.__map[cell_y][cell_x + 1].get_is_alive():
+        #         alive_neighbours += 1
+        #     if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x + 1].get_is_alive():
+        #         alive_neighbours += 1
+        #
+        # if cell_x - 1 >= 0:
+        #     if cell_y - 1 >= 0 and self.__map[cell_y - 1][cell_x - 1].get_is_alive():
+        #         alive_neighbours += 1
+        #     if self.__map[cell_y][cell_x - 1].get_is_alive():
+        #         alive_neighbours += 1
+        #     if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x - 1].get_is_alive():
+        #         alive_neighbours += 1
+        #
+        # if cell_y - 1 >= 0 and self.__map[cell_y - 1][cell_x].get_is_alive():
+        #     alive_neighbours += 1
+        # if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x].get_is_alive():
+        #     alive_neighbours += 1
 
-        if cell_x - 1 >= 0:
-            if cell_y - 1 >= 0 and (GameCell.GameCell(self.__map[cell_y - 1][cell_x - 1])).get_is_alive():
-                alive_neighbours += 1
-            if (GameCell.GameCell(self.__map[cell_y][cell_x - 1])).get_is_alive():
-                alive_neighbours += 1
-            if cell_y + 1 < self.__height and (GameCell.GameCell(self.__map[cell_y + 1][cell_x - 1])).get_is_alive():
-                alive_neighbours += 1
-
-        if cell_y - 1 >= 0 and (GameCell.GameCell(self.__map[cell_y - 1][cell_x])).get_is_alive():
+        if self.__map[(cell_y - 1) % self.__height][(cell_x + 1) % self.__width].get_is_alive():
             alive_neighbours += 1
-        if cell_y + 1 < self.__height and (GameCell.GameCell(self.__map[cell_y + 1][cell_x])).get_is_alive():
+        if self.__map[cell_y % self.__height][(cell_x + 1) % self.__width].get_is_alive():
+            alive_neighbours += 1
+        if self.__map[(cell_y + 1) % self.__height][(cell_x + 1) % self.__width].get_is_alive():
             alive_neighbours += 1
 
-        print(type(self.__map[cell_y][cell_x]))
+        if self.__map[(cell_y - 1) % self.__height][(cell_x - 1) % self.__width].get_is_alive():
+            alive_neighbours += 1
+        if self.__map[cell_y % self.__height][(cell_x - 1) % self.__width].get_is_alive():
+            alive_neighbours += 1
+        if self.__map[(cell_y + 1) % self.__height][(cell_x - 1) % self.__width].get_is_alive():
+            alive_neighbours += 1
+
+        if self.__map[(cell_y - 1) % self.__height][cell_x].get_is_alive():
+            alive_neighbours += 1
+        if self.__map[(cell_y + 1) % self.__height][cell_x].get_is_alive():
+            alive_neighbours += 1
 
         return alive_neighbours
 
@@ -69,5 +86,21 @@ class GameMap:
         for j in range(self.__height):
             new_map.append([])
             for i in range(self.__width):
-                new_map[j].append(GameCell.GameCell(True if 2 <= self.count_neighbours(i, j) <= 3 else False))
-        self.__map = new_map.copy()
+                count_neighbours = self.count_neighbours(i, j)
+                if 2 <= count_neighbours <= 3 and self.__map[j][i].get_is_alive() or count_neighbours == 3 and \
+                        not self.__map[j][i].get_is_alive():
+                    is_alive = True
+                else:
+                    is_alive = False
+
+                new_map[j].append(GameCell.GameCell(is_alive))
+        self.__map = list(new_map)
+
+    def get_width(self):
+        return self.__width
+
+    def get_height(self):
+        return self.__height
+
+    def get_map(self):
+        return self.__map
