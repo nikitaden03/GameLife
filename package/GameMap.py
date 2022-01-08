@@ -39,27 +39,6 @@ class GameMap:
     def count_neighbours(self, cell_x, cell_y):
         alive_neighbours = 0
 
-        # if cell_x + 1 < self.__width:
-        #     if cell_y - 1 >= 0 and self.__map[cell_y - 1][cell_x + 1].get_is_alive():
-        #         alive_neighbours += 1
-        #     if self.__map[cell_y][cell_x + 1].get_is_alive():
-        #         alive_neighbours += 1
-        #     if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x + 1].get_is_alive():
-        #         alive_neighbours += 1
-        #
-        # if cell_x - 1 >= 0:
-        #     if cell_y - 1 >= 0 and self.__map[cell_y - 1][cell_x - 1].get_is_alive():
-        #         alive_neighbours += 1
-        #     if self.__map[cell_y][cell_x - 1].get_is_alive():
-        #         alive_neighbours += 1
-        #     if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x - 1].get_is_alive():
-        #         alive_neighbours += 1
-        #
-        # if cell_y - 1 >= 0 and self.__map[cell_y - 1][cell_x].get_is_alive():
-        #     alive_neighbours += 1
-        # if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x].get_is_alive():
-        #     alive_neighbours += 1
-
         if self.__map[(cell_y - 1) % self.__height][(cell_x + 1) % self.__width].get_is_alive():
             alive_neighbours += 1
         if self.__map[cell_y % self.__height][(cell_x + 1) % self.__width].get_is_alive():
