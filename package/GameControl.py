@@ -10,7 +10,7 @@ class GameControl:
     def __init__(self, input_file, output_folder, max_iter, dump_freq):
         self._input_file = input_file.strip()
         self._output_folder = output_folder.strip()
-        self._max_iter = max_iter.strip()
+        self._max_iter = max_iter
         self._dump_freq = dump_freq
         self.game_map = None
         self.order = 0
@@ -47,3 +47,11 @@ class GameControl:
                 if game_map[j][i].get_is_alive():
                     generation.putpixel((i, j), (0, 0, 0))
         generation.save(self.generate_label())
+
+    def play_game(self):
+        i = 0
+        while i < self._max_iter or self._max_iter == 0:
+            self.game_map.next_generation()
+            if i % self._dump_freq == 0:
+                self.save_generation()
+            i += 1

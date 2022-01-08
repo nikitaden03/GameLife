@@ -17,7 +17,7 @@ def parse_args():
     parser.add_argument("--dump_freq", dest="dump_freq", default=1)
 
     args = parser.parse_args()
-    game_control = GameControl.GameControl(args.input_file, args.output_folder, args.max_iter, args.dump_freq)
+    game_control = GameControl.GameControl(args.input_file, args.output_folder, int(args.max_iter), int(args.dump_freq))
 
     return game_control
 
@@ -26,11 +26,7 @@ def main():
     alert_window()
     game_control = parse_args()
     game_control.prepare_folder()
-
-    for i in range(400):
-
-        game_control.game_map.next_generation()
-        game_control.save_generation()
+    game_control.play_game()
 
 
 if __name__ == "__main__":
