@@ -13,7 +13,7 @@ class GameMap:
         for j in range(self.__height):
             self.__map.append([])
             for i in range(self.__width):
-                self.__map[j].append(GameCell.GameCell())
+                self.__map[j].append(GameCell.GameCell(False))
                 color = first_generation.getpixel((i, j))
                 if color in colors:
                     colors[color] += 1
@@ -32,6 +32,42 @@ class GameMap:
         for j in range(self.__height):
             for i in range(self.__width):
                 if first_generation.getpixel((i, j)) == (255, 255, 255):
-                    self.__map[j][i].set_is_alive = False
+                    self.__map[j][i].set_is_alive(False)
                 else:
-                    self.__map[j][i].set_is_alive = True
+                    self.__map[j][i].set_is_alive(True)
+
+    def count_neighbours(self, cell_x, cell_y):
+        alive_neighbours = 0
+
+        if cell_x + 1 < self.__width:
+            if cell_y - 1 >= 0 and (GameCell.GameCell(self.__map[cell_y - 1][cell_x + 1])).get_is_alive():
+                alive_neighbours += 1
+            if (GameCell.GameCell(self.__map[cell_y][cell_x + 1])).get_is_alive():
+                alive_neighbours += 1
+            if cell_y + 1 < self.__height and (GameCell.GameCell(self.__map[cell_y + 1][cell_x + 1])).get_is_alive():
+                alive_neighbours += 1
+
+        if cell_x - 1 >= 0:
+            if cell_y - 1 >= 0 and (GameCell.GameCell(self.__map[cell_y - 1][cell_x - 1])).get_is_alive():
+                alive_neighbours += 1
+            if (GameCell.GameCell(self.__map[cell_y][cell_x - 1])).get_is_alive():
+                alive_neighbours += 1
+            if cell_y + 1 < self.__height and (GameCell.GameCell(self.__map[cell_y + 1][cell_x - 1])).get_is_alive():
+                alive_neighbours += 1
+
+        if cell_y - 1 >= 0 and (GameCell.GameCell(self.__map[cell_y - 1][cell_x])).get_is_alive():
+            alive_neighbours += 1
+        if cell_y + 1 < self.__height and (GameCell.GameCell(self.__map[cell_y + 1][cell_x])).get_is_alive():
+            alive_neighbours += 1
+
+        print(type(self.__map[cell_y][cell_x]))
+
+        return alive_neighbours
+
+    def next_generation(self):
+        new_map = []
+        for j in range(self.__height):
+            new_map.append([])
+            for i in range(self.__width):
+                new_map[j].append(GameCell.GameCell(True if 2 <= self.count_neighbours(i, j) <= 3 else False))
+        self.__map = new_map.copy()

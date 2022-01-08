@@ -16,7 +16,6 @@ class GameControl:
         self.init_map()
 
     def init_map(self):
-
         if not (os.path.exists(self._input_file) and os.path.isfile(self._input_file)):
             print(f"К сожалению, {self._input_file} не существует или не является файлом!")
             exit(0)
@@ -25,3 +24,6 @@ class GameControl:
             exit(0)
 
         self.game_map = GameMap(Image.open(self._input_file).convert("RGB"))
+
+        self.game_map.next_generation()
+        self.game_map.next_generation()
