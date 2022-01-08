@@ -30,17 +30,20 @@ class GameControl:
 
         self.game_map = GameMap(Image.open(self._input_file).convert("RGB"))
 
-        self.generate_number()
-        self.generate_number()
-
     def prepare_folder(self):
         if os.path.exists(self._output_folder):
             shutil.rmtree(self._output_folder)
         os.mkdir(self._output_folder)
 
-    def generate_number(self):
+    def generate_label(self):
         self.order += 1
-        return self._output_folder + "/" + str(self.order)
+        return self._output_folder + "/" + str(self.order) + ".png"
 
-    def safe_generation(self):
-        pass
+    def save_generation(self):
+        generation = Image.new('RGB', (self.game_map.get_width(), self.game_map.get_height()), 'white')
+        game_map = self.game_map.get_map()
+        for j in range(self.game_map.get_height()):
+            for i in range(self.game_map.get_width()):
+                if game_map[j][i].get_is_alive():
+                    generation.putpixel((i, j), (0, 0, 0))
+        generation.save(self.generate_label())

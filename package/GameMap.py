@@ -60,14 +60,28 @@ class GameMap:
         if cell_y + 1 < self.__height and self.__map[cell_y + 1][cell_x].get_is_alive():
             alive_neighbours += 1
 
-        print(type(self.__map[cell_y][cell_x]))
-
         return alive_neighbours
 
     def next_generation(self):
-        new_map = self.__map.copy()
+        new_map = []
         for j in range(self.__height):
             new_map.append([])
             for i in range(self.__width):
-                new_map[j].append(GameCell.GameCell(True if 2 <= self.count_neighbours(i, j) <= 3 else False))
-        self.__map = new_map.copy()
+                count_neighbours = self.count_neighbours(i, j)
+                if 2 <= count_neighbours <= 3 and self.__map[j][i].get_is_alive() or count_neighbours == 3 and \
+                        not self.__map[j][i].get_is_alive():
+                    is_alive = True
+                else:
+                    is_alive = False
+
+                new_map[j].append(GameCell.GameCell(is_alive))
+        self.__map = list(new_map)
+
+    def get_width(self):
+        return self.__width
+
+    def get_height(self):
+        return self.__height
+
+    def get_map(self):
+        return self.__map

@@ -27,6 +27,11 @@ def main():
     game_control = parse_args()
     game_control.prepare_folder()
 
+    for i in range(300):
+
+        game_control.game_map.next_generation()
+        game_control.save_generation()
+
 
 if __name__ == "__main__":
     main()
