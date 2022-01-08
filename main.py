@@ -1,8 +1,6 @@
 import argparse
 from package import GameControl
 
-game_control = None
-
 
 def alert_window():
     input(
@@ -11,7 +9,6 @@ def alert_window():
 
 
 def parse_args():
-    global game_control
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", dest="input_file", required=True)
@@ -22,10 +19,13 @@ def parse_args():
     args = parser.parse_args()
     game_control = GameControl.GameControl(args.input_file, args.output_folder, args.max_iter, args.dump_freq)
 
+    return game_control
+
 
 def main():
     alert_window()
-    parse_args()
+    game_control = parse_args()
+    game_control.prepare_folder()
 
 
 if __name__ == "__main__":
