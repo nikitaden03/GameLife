@@ -36,7 +36,7 @@ class GameMap:
                 else:
                     self.__map[j][i].set_is_alive(True)
 
-    def count_neighbours(self, cell_x, cell_y):
+    def __count_neighbours(self, cell_x, cell_y):
         alive_neighbours = 0
 
         if self.__map[(cell_y - 1) % self.__height][(cell_x + 1) % self.__width].get_is_alive():
@@ -65,7 +65,7 @@ class GameMap:
         for j in range(self.__height):
             new_map.append([])
             for i in range(self.__width):
-                count_neighbours = self.count_neighbours(i, j)
+                count_neighbours = self.__count_neighbours(i, j)
                 if 2 <= count_neighbours <= 3 and self.__map[j][i].get_is_alive() or count_neighbours == 3 and \
                         not self.__map[j][i].get_is_alive():
                     is_alive = True

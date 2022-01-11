@@ -12,8 +12,9 @@ class GameControl:
         self._output_folder = output_folder.strip()
         self._max_iter = max_iter
         self._dump_freq = dump_freq
-        self.game_map = None
+        self.__game_map = None
         self.order = 0
+        self.__frames = []
         self.init_map()
 
     def init_map(self):
@@ -28,30 +29,43 @@ class GameControl:
                   "будет создана, иначе все содержимое будет безвозвратно удалено!")
             exit(0)
 
-        self.game_map = GameMap(Image.open(self._input_file).convert("RGB"))
+        self.__game_map = GameMap(Image.open(self._input_file).convert("RGB"))
 
     def prepare_folder(self):
         if os.path.exists(self._output_folder):
             shutil.rmtree(self._output_folder)
         os.mkdir(self._output_folder)
 
-    def generate_label(self):
+    def __generate_label(self):
         self.order += 1
-        return self._output_folder + "/" + str(self.order) + ".png"
+        return self._output_folder + "/" + "Generation - " +  str(self.order) + ".png"
 
-    def save_generation(self):
-        generation = Image.new('RGB', (self.game_map.get_width(), self.game_map.get_height()), 'white')
-        game_map = self.game_map.get_map()
-        for j in range(self.game_map.get_height()):
-            for i in range(self.game_map.get_width()):
+    def __save_generation(self):
+        generation = Image.new('RGB', (self.__game_map.get_width(), self.__game_map.get_height()), 'white')
+        game_map = self.__game_map.get_map()
+        for j in range(self.__game_map.get_height()):
+            for i in range(self.__game_map.get_width()):
                 if game_map[j][i].get_is_alive():
                     generation.putpixel((i, j), (0, 0, 0))
-        generation.save(self.generate_label())
+        label = self.__generate_label()
+        generation.save(label)
+        self.__frames.append(Image.open(label).convert("RGB"))
 
     def play_game(self):
         i = 0
         while i < self._max_iter or self._max_iter == 0:
-            self.game_map.next_generation()
+            self.__game_map.next_generation()
             if i % self._dump_freq == 0:
-                self.save_generation()
+                self.__save_generation()
             i += 1
+        self.__save_gif()
+
+    def __save_gif(self):
+        self.__frames[0].save(
+            self._output_folder + "/" + "Generation.gif",
+            save_all=True,
+            append_images=self.__frames[1:],
+            optimize=True,
+            duration=20,
+            loop=0
+        )
