@@ -132,5 +132,7 @@ fabric.properties
 *.wps
 
 .idea/*
+package/__pycache__/*
+files/output/*
 
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,text,executable
