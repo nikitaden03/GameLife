@@ -7,6 +7,8 @@ from package.GameMap import GameMap
 class GameControl:
     _input_file, _output_folder, _max_iter, _dump_freq = "", "", 0, 0
 
+    __hash_set = {}
+
     def __init__(self, input_file, output_folder, max_iter, dump_freq):
         self._input_file = input_file.strip()
         self._output_folder = output_folder.strip()
@@ -54,6 +56,10 @@ class GameControl:
     def play_game(self):
         i = 0
         while i < self._max_iter or self._max_iter == 0:
+            hash_obj = self.__game_map.get_hash()
+            # if hash_obj in self.__hash_set:
+            #     break
+            self.__hash_set[hash_obj] = True
             self.__game_map.next_generation()
             if i % self._dump_freq == 0:
                 self.__save_generation()

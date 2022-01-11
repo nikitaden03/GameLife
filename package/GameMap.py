@@ -4,6 +4,7 @@ from package import GameCell
 class GameMap:
     __height, __width = 0, 0
     __map = []
+    TABLE_SIZE = 20000000089
 
     def __init__(self, first_generation):
         self.__height = first_generation.size[1]
@@ -74,6 +75,24 @@ class GameMap:
 
                 new_map[j].append(GameCell.GameCell(is_alive))
         self.__map = list(new_map)
+
+    def get_hash(self):
+        hash_obj_1, hash_obj_2, hash_obj_3, hash_obj_4 = 0, 0, 0, 0
+        for j in range(self.__height):
+            degree_1, degree_2, degree_3, degree_4 = 1, 1, 1, 1
+            for i in range(self.__width):
+                alive = self.__map[j][i].get_is_alive()
+                hash_obj_1, hash_obj_2, hash_obj_3, hash_obj_4 = (j + 1) * (
+                            hash_obj_1 + degree_1 * alive) % self.TABLE_SIZE, \
+                                                                 (j + 1) * (
+                                                                             hash_obj_2 + degree_2 * alive) % self.TABLE_SIZE, \
+                                                                 (j + 1) * (
+                                                                             hash_obj_3 + degree_3 * alive) % self.TABLE_SIZE, \
+                                                                 (j + 1) * (
+                                                                             hash_obj_4 + degree_4 * alive) % self.TABLE_SIZE
+                degree_1, degree_2, degree_3, degree_4 = degree_1 * 2 % self.TABLE_SIZE, degree_2 * 7 % self.TABLE_SIZE, \
+                                                         degree_3 * 11 % self.TABLE_SIZE, degree_4 * 13 % self.TABLE_SIZE
+        return hash_obj_1, hash_obj_2, hash_obj_3, hash_obj_4
 
     def get_width(self):
         return self.__width
