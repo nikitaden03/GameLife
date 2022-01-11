@@ -9,7 +9,11 @@ def alert_window():
 
 
 def parse_args():
-
+    """
+    Функция разбирает аргументы комндной строки, создает объект класса GameControl
+    и передает в качестве стартовых параметров распарсенные аргументы
+    :return: Ранее созданный объект класса GameControl
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", dest="input_file", required=True)
     parser.add_argument("--output", dest="output_folder", required=True)

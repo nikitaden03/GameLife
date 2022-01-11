@@ -1,3 +1,8 @@
+"""
+    Класс, управляющие ходом игры, запускает инициализацию игрового поля, управляет генерированием и сохранением новых
+    поколений, а также останавливает игру, когда достигаются нужные условия
+"""
+
 import os.path
 import shutil
 from PIL import Image
@@ -20,6 +25,10 @@ class GameControl:
         self.init_map()
 
     def init_map(self):
+        """
+        Функция проверяет, что передано корректное изображение в качестве первого поколения, и запускает инициализацию
+        игрового поля
+        """
         if not (os.path.exists(self._input_file) and os.path.isfile(self._input_file)):
             print(f"К сожалению, {self._input_file} не существует или не является файлом!")
             exit(0)
@@ -34,15 +43,25 @@ class GameControl:
         self.__game_map = GameMap(Image.open(self._input_file).convert("RGB"))
 
     def prepare_folder(self):
+        """
+        Если требуется, очищает папку, в которой будут лежать новые поколения
+        """
         if os.path.exists(self._output_folder):
             shutil.rmtree(self._output_folder)
         os.mkdir(self._output_folder)
 
     def __generate_label(self):
+        """
+        Генерирует путь нового поколения, имеющему вид "путь к папке/Generation - номер поколения"
+        :return: путь к новому поколению
+        """
         self.order += 1
         return self._output_folder + "/" + "Generation - " +  str(self.order) + ".png"
 
     def __save_generation(self):
+        """
+        Сохраняет новое поколение в формате rgb
+        """
         generation = Image.new('RGB', (self.__game_map.get_width(), self.__game_map.get_height()), 'white')
         game_map = self.__game_map.get_map()
         for j in range(self.__game_map.get_height()):
@@ -54,11 +73,14 @@ class GameControl:
         self.__frames.append(Image.open(label).convert("RGB"))
 
     def play_game(self):
+        """
+        Управляет ходом игры; когда игра подойдет к концу, запускает сохранение гиф-изображения
+        """
         i = 0
         while i < self._max_iter or self._max_iter == 0:
             hash_obj = self.__game_map.get_hash()
-            # if hash_obj in self.__hash_set:
-            #     break
+            if hash_obj in self.__hash_set:
+                break
             self.__hash_set[hash_obj] = True
             self.__game_map.next_generation()
             if i % self._dump_freq == 0:
@@ -67,6 +89,9 @@ class GameControl:
         self.__save_gif()
 
     def __save_gif(self):
+        """
+        Сохраняет гиф-изображение
+        """
         self.__frames[0].save(
             self._output_folder + "/" + "Generation.gif",
             save_all=True,
